@@ -25,10 +25,5 @@ pico_sdk_init()
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffunction-sections -fdata-sections")
 
-# Add student/common modules
-add_subdirectory(apps/hello_freertos)
-#add_subdirectory(apps/01_task)
-#add_subdirectory(apps/02_queues)
-#add_subdirectory(apps/03_events)
-add_subdirectory(apps/04_smp)
+
 add_subdirectory(apps/exam_project)
