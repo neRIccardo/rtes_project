@@ -16,7 +16,7 @@ Non utilizza hardware aggiuntivo oltre al Pico stesso.
 - **Task menu**: riceve comandi via seriale per:
   - Avviare/sospendere la rilevazione
   - Modificare soglia e intervallo
-  - Visualizzare media mobile delle ultime letture
+  - Visualizzare media delle ultime letture
   - Visualizzare la soglia corrente e l’intervallo corrente
 - **Task statistiche**: ogni 10 s mostra min, max e deviazione standard delle ultime letture.
 - **Task diagnostico**: ogni 10 s mostra memoria heap libera e stack residuo dei task.
@@ -31,7 +31,7 @@ Non utilizza hardware aggiuntivo oltre al Pico stesso.
 - Raspberry Pi Pico
 - Toolchain ARM e Pico SDK configurati
 - FreeRTOS Kernel incluso nel progetto
-- Un sistema Linux (testato su Ubuntu 22.04 con WSL o nativo)
+- Un sistema Linux (testato su Ubuntu 22.04 con WSL)
 
 ---
 
@@ -80,7 +80,7 @@ cp apps/exam_project.uf2 $(findmnt -rn -o TARGET -S LABEL=RPI-RP2)/
 
 ***Nota per chi usa WSL***
 - Su Windows Subsystem for Linux il comando "findmnt" potrebbe non funzionare e il disco RPI-RP2 non viene montato automaticamente in WSL.
-In questo caso, dopo aver generato il file ".uf2" nella cartella "build/apps/", copia manualmente il file in RPI-RP2 tramite l’esplora risorse di Windows: basta aprire la cartella "build/apps", trovare "exam_project.uf2" e trascinarlo sul disco RPI-RP2
+- In questo caso, dopo aver generato il file ".uf2" nella cartella "build/apps/", copia manualmente il file in RPI-RP2 tramite l’esplora risorse di Windows: basta aprire la cartella "build/apps", trovare "exam_project.uf2" e trascinarlo sul disco RPI-RP2
 
 ---
 
