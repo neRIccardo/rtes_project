@@ -13,11 +13,19 @@
 // ===================== CONFIGURAZIONE =====================
 
 // Intervallo di acquisizione iniziale (ms)
-#define ACQUISITION_PERIOD_MS_DEFAULT 500
+#define ACQUISITION_PERIOD_MS_DEFAULT 1000
 // Lunghezza massima della coda fra acquisizione e processing
 #define TEMP_QUEUE_LENGTH 10
 // Numero di letture da memorizzare nel buffer circolare per statistiche
 #define AVG_BUFFER_SIZE 10
+
+// ===================== TIPI E DEFINIZIONI =====================
+
+// Struct per dati da passare alla coda
+typedef struct {
+    TickType_t timestamp; // timestamp in tick FreeRTOS
+    float temperature; // temperatura in gradi Celsius
+} TempSample_t;
 
 // ===================== HANDLE GLOBALI =====================
 
@@ -143,13 +151,15 @@ static void printMenuHelp(void) {
  */
 static void vTaskAcquisition(void *pvParameters) {
     (void) pvParameters;
+    TempSample_t sample;
     for (;;) {
         if (getIsRunning()) {
-            float temp = read_onboard_temperature();
-            xQueueSend(xTempQueue, &temp, portMAX_DELAY);
-
+            sample.temperature = read_onboard_temperature();
+            sample.timestamp = xTaskGetTickCount();
+            xQueueSend(xTempQueue, &sample, portMAX_DELAY);
+            
             xSemaphoreTake(xAvgBufferMutex, portMAX_DELAY);
-            avgBuffer[avgIndex] = temp;
+            avgBuffer[avgIndex] = sample.temperature;
             avgIndex = (avgIndex + 1) % AVG_BUFFER_SIZE;
             if (avgCount < AVG_BUFFER_SIZE) avgCount++;
             xSemaphoreGive(xAvgBufferMutex);
@@ -164,18 +174,18 @@ static void vTaskAcquisition(void *pvParameters) {
  */
 static void vTaskProcessing(void *pvParameters) {
     (void) pvParameters;
+    TempSample_t sample;
     for (;;) {
-        float newTemp;
-        if (xQueueReceive(xTempQueue, &newTemp, portMAX_DELAY) == pdTRUE) {
+        if (xQueueReceive(xTempQueue, &sample, portMAX_DELAY) == pdTRUE) {
             if (getIsRunning()) {
                 // Lampeggio LED se sopra soglia
-                if (newTemp > getThreshold()) {
+                if (sample.temperature > getThreshold()) {
                     gpio_put(PICO_DEFAULT_LED_PIN, 1);
                     vTaskDelay(pdMS_TO_TICKS(100));
                     gpio_put(PICO_DEFAULT_LED_PIN, 0);
                     vTaskDelay(pdMS_TO_TICKS(100));
                 }
-                safe_print("[TEMP] %.2f°C\n", newTemp);
+                safe_print("[TEMP] %lu ms: %.2f°C\n", (unsigned long)sample.timestamp, sample.temperature);
             }
         }
     }
@@ -315,7 +325,7 @@ int main() {
     gpio_set_dir(PICO_DEFAULT_LED_PIN, true);
 
     // Crea strutture di sincronizzazione
-    xTempQueue = xQueueCreate(TEMP_QUEUE_LENGTH, sizeof(float));
+    xTempQueue = xQueueCreate(TEMP_QUEUE_LENGTH, sizeof(TempSample_t));
     xSerialMutex = xSemaphoreCreateMutex();
     xThresholdMutex = xSemaphoreCreateMutex();
     xAvgBufferMutex = xSemaphoreCreateMutex();
