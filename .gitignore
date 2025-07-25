@@ -1,3 +1,4 @@
 /build
 pico-sdk
 /logger/log.csv
+/logger/grafico_temperatura.png
