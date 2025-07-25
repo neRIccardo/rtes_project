@@ -140,7 +140,7 @@ static void printMenuHelp(void) {
     safe_print("  p = mostra soglia attuale\n");
     safe_print("  s<val> = imposta nuova soglia (es: s30)\n");
     safe_print("  m = media ultime 10 letture\n");
-    safe_print("  i<ms> = imposta intervallo acquisizione (es: i1000)\n");
+    safe_print("  i<ms> = imposta intervallo acquisizione (es: i500)\n");
     safe_print("  g = mostra intervallo acquisizione attuale\n\n");
 }
 
@@ -233,8 +233,8 @@ static void vTaskMenu(void *pvParameters) {
                         }
                         case 'i': {
                             int ms = atoi(&inputBuf[1]);
-                            if (ms >= 100 && ms <= 5000) { setAcquisitionPeriod(ms); safe_print("[MENU] Nuovo intervallo: %d ms\n", ms); }
-                            else safe_print("[MENU] Valore intervallo non valido (100-5000 ms).\n");
+                            if (ms >= 500 && ms <= 2000) { setAcquisitionPeriod(ms); safe_print("[MENU] Nuovo intervallo: %d ms\n", ms); }
+                            else safe_print("[MENU] Valore intervallo non valido (500-2000 ms).\n");
                             break;
                         }
                         case 'g': { safe_print("[MENU] Intervallo acquisizione: %d ms\n", getAcquisitionPeriod()); break; }
