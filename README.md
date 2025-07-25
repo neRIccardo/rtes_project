@@ -13,7 +13,7 @@ Non utilizza hardware aggiuntivo oltre al Pico stesso.
 ✅ Gestione concorrente con **FreeRTOS** tramite:
 - **Task di acquisizione**: legge la temperatura a intervalli configurabili
 - **Task di elaborazione**: stampa la temperatura e lampeggia il LED se supera una soglia
-- **Task menu**: riceve comandi via seriale per:
+- **Task menu**: riceve comandi via seriale per...
   - Avviare/sospendere la rilevazione
   - Modificare soglia e intervallo
   - Visualizzare media delle ultime letture
