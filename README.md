@@ -124,7 +124,7 @@ Chiudi qualsiasi programma stia usando la porta COM (es. PuTTY), poi esegui:
 python3 log_temp.py
 ```
 ✅ Funzionalità:
-- Mostra in tempo reale le righe [TEMP] …
+- Mostra in tempo reale i messaggi generati dai task tramite seriale
 - Puoi digitare i comandi del menu direttamente in questa console
 - Salva i dati in "log.csv"
 - Quando premi CTRL+C ferma la lettura e genera automaticamente "grafico_temperatura.png" con i dati letti
@@ -134,7 +134,7 @@ Il grafico salvato (grafico_temperatura.png) mostra:
 - ***Linea blu***: valori di temperatura letti
 - ***Linea rossa***: media mobile (finestra 10 letture) per evidenziare la tendenza
 ---
-## ℹ️ Note su implementazione
+## ℹ️ Note implementative
 - Usa ***mutex*** per proteggere accessi concorrenti alle variabili condivise
 
 - Usa ***code FreeRTOS*** per passare le temperature dal task di acquisizione al task di elaborazione
