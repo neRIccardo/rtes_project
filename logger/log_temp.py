@@ -111,9 +111,9 @@ def writer():
     """
     while not stop_event.is_set():
         try:
-            cmd = sys.stdin.readline()
+            cmd = sys.stdin.readline() # legge una riga di input
             if cmd:
-                ser.write(cmd.encode("utf-8"))
+                ser.write(cmd.encode("utf-8")) # invia il comando al Pico
         except Exception as e:
             if not stop_event.is_set():
                 print_queue.put(f"[ERRORE scrittura] {e}")
@@ -122,7 +122,7 @@ def writer():
 # =========================================================
 # AVVIO THREAD
 # =========================================================
-t_reader = threading.Thread(target=reader, daemon=True)
+t_reader = threading.Thread(target=reader, daemon=True) # Daemon per chiudere automaticamente alla fine del programma
 t_writer = threading.Thread(target=writer, daemon=True)
 t_printer = threading.Thread(target=printer, daemon=True)
 
